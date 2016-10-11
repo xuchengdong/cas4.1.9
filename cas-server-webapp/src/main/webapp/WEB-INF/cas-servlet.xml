@@ -69,6 +69,7 @@
     <property name="basenames">
         <util:list>
             <value>cas_views</value>
+            <!--<value>wap_views</value>-->
         </util:list>
     </property>
   </bean>
@@ -95,6 +96,12 @@
         p:prefix="${cas.viewResolver.defaultViewsPathPrefix:/WEB-INF/view/jsp/default/ui/}"
         p:suffix=".jsp"
         p:order="3"/>
+
+<!--  <bean id="internalViewResolver4wap" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:viewClass="org.springframework.web.servlet.view.JstlView"
+        p:prefix="${cas.viewResolver.wapViewsPathPrefix:/WEB-INF/view/jsp/wap/ui/}"
+        p:suffix=".jsp"
+        p:order="4"/>-->
 
   <!-- Locale Resolver -->
   <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" p:defaultLocale="zh_CN" />
@@ -181,6 +188,39 @@
     <webflow:flow-location-pattern value="/login/*-webflow.xml"/>
   </webflow:flow-registry>
 
+
+  <!-- login4wap webflow configuration -->
+  <bean id="login4wapFlowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping"
+        p:flowRegistry-ref="login4wapFlowRegistry" p:order="4">
+    <property name="interceptors">
+      <array value-type="org.springframework.web.servlet.HandlerInterceptor">
+        <ref bean="localeChangeInterceptor" />
+      </array>
+    </property>
+  </bean>
+
+  <bean id="login4wapHandlerAdapter" class="org.jasig.cas.web.flow.SelectiveFlowHandlerAdapter"
+        p:supportedFlowId="login4wap" p:flowExecutor-ref="login4wapFlowExecutor" p:flowUrlHandler-ref="login4wapFlowUrlHandler" />
+
+  <bean id="login4wapFlowUrlHandler" class="org.jasig.cas.web.flow.CasDefaultFlowUrlHandler" />
+
+  <bean name="login4wapFlowExecutor" class="org.springframework.webflow.executor.FlowExecutorImpl"
+        c:definitionLocator-ref="login4wapFlowRegistry"
+        c:executionFactory-ref="login4wapFlowExecutionFactory"
+        c:executionRepository-ref="login4wapFlowExecutionRepository" />
+
+  <bean name="login4wapFlowExecutionFactory" class="org.springframework.webflow.engine.impl.FlowExecutionImplFactory"
+        p:executionKeyFactory-ref="login4wapFlowExecutionRepository"/>
+
+  <bean id="login4wapFlowExecutionRepository" class=" org.jasig.spring.webflow.plugin.ClientFlowExecutionRepository"
+        c:flowExecutionFactory-ref="login4wapFlowExecutionFactory"
+        c:flowDefinitionLocator-ref="login4wapFlowRegistry"
+        c:transcoder-ref="loginFlowStateTranscoder" />
+
+  <webflow:flow-registry id="login4wapFlowRegistry" flow-builder-services="builder" base-path="/WEB-INF/webflow">
+    <webflow:flow-location-pattern value="/login4wap/*-webflow.xml"/>
+  </webflow:flow-registry>
+
   <!-- logout webflow configuration -->
   <bean id="logoutFlowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping"
         p:flowRegistry-ref="logoutFlowRegistry" p:order="3">
@@ -224,6 +264,7 @@
       <util:list>
         <ref bean="viewResolver"/>
         <ref bean="internalViewResolver"/>
+        <!--<ref bean="internalViewResolver4wap"/>-->
       </util:list>
     </property>
   </bean>
