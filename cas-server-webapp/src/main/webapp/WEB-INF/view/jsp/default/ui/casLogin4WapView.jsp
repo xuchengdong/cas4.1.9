@@ -34,7 +34,7 @@
     <p><spring:message code="screen.cookies.disabled.message" /></p>
 </div>
 
-<h2>欢迎光临wap登录页</h2>
+<h2>欢迎光临wap登录页/WEB-INF/view/jsp/default/ui/casLogin4WapView.jsp</h2>
 <hr>
 
 <c:if test="${not empty registeredService}">
