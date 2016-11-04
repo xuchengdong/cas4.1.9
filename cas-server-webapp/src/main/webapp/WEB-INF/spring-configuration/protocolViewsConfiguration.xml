@@ -120,8 +120,4 @@
     <bean id="openIdProviderView" class="org.springframework.web.servlet.view.JstlView"
           c:url="/WEB-INF/view/jsp/protocol/openid/user.jsp" />
 
-    <!-- 定义位于default目录外的登录页面 -->
-<!--    <bean id="casLogin4Wap2View" class="org.springframework.web.servlet.view.JstlView"
-          c:url="/WEB-INF/view/jsp/wap/ui/casLoginView.jsp" />-->
-
 </beans>
